@@ -1,5 +1,6 @@
 package com.forohub.challenge.domain.topico;
 
+import com.forohub.challenge.domain.curso.Curso;
 import com.forohub.challenge.domain.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -34,17 +35,22 @@ public class Topico {
     @JoinColumn(name = "autor_id")
     private Usuario autor;
 
-    public Topico(DatosAgregarTopico datos, Usuario autor){
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "curso_id")
+    private Curso curso;
+
+
+
+    public Topico(DatosAgregarTopico datos, Usuario autor, Curso curso){
         this.titulo = datos.titulo();
         this.mensaje = datos.mensaje();
         this.fechaCreacion = LocalDateTime.now();
         this.status = status.ABIERTO;
         this.autor = autor;
+        this.curso = curso;
     }
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "curso_id")
-    //private Curso curso;
+
 
 
     //private List<Respuesta> respuestas;
