@@ -1,14 +1,10 @@
 package com.forohub.challenge.domain.curso;
 
-
-import com.forohub.challenge.domain.topico.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Table(name = "curso")
 @Entity(name = "Curso")
