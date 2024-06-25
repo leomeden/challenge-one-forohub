@@ -34,6 +34,14 @@ public class Topico {
     @JoinColumn(name = "autor_id")
     private Usuario autor;
 
+    public Topico(DatosAgregarTopico datos, Usuario autor){
+        this.titulo = datos.titulo();
+        this.mensaje = datos.mensaje();
+        this.fechaCreacion = LocalDateTime.now();
+        this.status = status.ABIERTO;
+        this.autor = autor;
+    }
+
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "curso_id")
     //private Curso curso;
