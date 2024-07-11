@@ -31,11 +31,11 @@ public class Topico {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "autor_id")
     private Usuario autor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "curso_id")
     private Curso curso;
 
@@ -45,7 +45,7 @@ public class Topico {
         this.titulo = datos.titulo();
         this.mensaje = datos.mensaje();
         this.fechaCreacion = LocalDateTime.now();
-        this.status = status.ABIERTO;
+        this.status = Status.ABIERTO;
         this.autor = autor;
         this.curso = curso;
     }

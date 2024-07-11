@@ -5,6 +5,8 @@ import com.forohub.challenge.domain.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TopicosService {
 
@@ -27,5 +29,10 @@ public class TopicosService {
 
         topicoRepository.save(topico);
 
+    }
+
+    public List<DatosListadoTopico> listarTopicos() {
+
+        return topicoRepository.findAll().stream().map(DatosListadoTopico::new).toList();
     }
 }
