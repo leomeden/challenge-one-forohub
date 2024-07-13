@@ -22,8 +22,12 @@ public class Topico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String titulo;
+
     private String mensaje;
+
+    private Boolean activo;
 
     @Column(name = "fecha_creacion")
     private LocalDateTime fechaCreacion;
@@ -44,6 +48,7 @@ public class Topico {
     public Topico(DatosAgregarTopico datos, Usuario autor, Curso curso){
         this.titulo = datos.titulo();
         this.mensaje = datos.mensaje();
+        this.activo = true;
         this.fechaCreacion = LocalDateTime.now();
         this.status = Status.ABIERTO;
         this.autor = autor;
@@ -66,4 +71,7 @@ public class Topico {
 
     }
 
+    public void desactivarTopico() {
+        this.activo = false;
+    }
 }

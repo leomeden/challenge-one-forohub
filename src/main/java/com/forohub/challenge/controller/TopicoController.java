@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @Controller
@@ -25,9 +27,10 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<String> agregar(@RequestBody @Valid DatosAgregarTopico datos){
-        topicosService.agregarTopico(datos);
-        return ResponseEntity.ok("Verificar si se guardo - el request llego correctamente");
+    public ResponseEntity<DatosListadoTopico> agregar(@RequestBody @Valid DatosAgregarTopico datos, UriComponentsBuilder uriComponentsBuilder){
+        DatosListadoTopico topico =  topicosService.agregarTopico(datos);
+        URI url = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(topico.id()).toUri();
+        return ResponseEntity.created(url).body(topico);
     }
 
     @GetMapping
@@ -35,17 +38,26 @@ public class TopicoController {
         return ResponseEntity.ok(topicosService.listarTopicos(paginacion));
     }
 
+    @GetMapping("/{id}")
+    @Transactional
+    public ResponseEntity<DatosListadoTopico> actualizarTopico(@PathVariable Long id){
+
+        return ResponseEntity.ok(topicosService.obtenerTopicoPorId(id));
+    }
+
+
+
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<String> actualizarTopico(@PathVariable Long id, @RequestBody DatosActualizarTopico datos){
-        topicosService.actualizarTopico(id, datos);
-        return ResponseEntity.ok("Se actualizó con éxito");
+    public ResponseEntity<DatosListadoTopico> actualizarTopico(@PathVariable Long id, @RequestBody DatosActualizarTopico datos){
+
+        return ResponseEntity.ok(topicosService.actualizarTopico(id, datos));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity<String> eliminarTopico(@PathVariable Long id){
+    public ResponseEntity eliminarTopico(@PathVariable Long id){
         topicosService.eliminarTopico(id);
-        return ResponseEntity.ok("Se eliminó con éxito");
+        return ResponseEntity.noContent().build();
     }
 }

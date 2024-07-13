@@ -8,6 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
+import static java.lang.Long.valueOf;
 
 @Service
 public class TopicosService {
@@ -21,7 +24,7 @@ public class TopicosService {
     @Autowired
     private CursoRepository cursoRepository;
 
-    public void agregarTopico(DatosAgregarTopico datos){
+    public DatosListadoTopico agregarTopico(DatosAgregarTopico datos){
 
         var usuario = usuarioRepository.findById(datos.idAutor()).get();
 
@@ -29,22 +32,31 @@ public class TopicosService {
 
         var topico = new Topico(datos, usuario, curso);
 
-        topicoRepository.save(topico);
+        return new DatosListadoTopico(topicoRepository.save(topico)) ;
 
     }
 
     public Page<DatosListadoTopico> listarTopicos(Pageable paginacion) {
 
-        return topicoRepository.findAll(paginacion).map(DatosListadoTopico::new);
+        //return topicoRepository.findAll(paginacion).map(DatosListadoTopico::new);
+        return topicoRepository.findByActivoTrue(paginacion).map(DatosListadoTopico::new);
     }
 
-    public void actualizarTopico(Long id, DatosActualizarTopico datos) {
+    public DatosListadoTopico actualizarTopico(Long id, DatosActualizarTopico datos) {
         Topico topico = topicoRepository.getReferenceById(id);
         topico.actualizarDatos(datos);
+        return new DatosListadoTopico(topico);
     }
 
+    //delete logico
     public void eliminarTopico(Long id) {
         Topico topico = topicoRepository.getReferenceById(id);
-        topicoRepository.delete(topico);
+        //topicoRepository.delete(topico);
+        topico.desactivarTopico();
+
+    }
+
+    public DatosListadoTopico obtenerTopicoPorId(Long id) {
+        return new DatosListadoTopico(topicoRepository.getReferenceById(id));
     }
 }
