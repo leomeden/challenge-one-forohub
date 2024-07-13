@@ -3,6 +3,8 @@ package com.forohub.challenge.domain.topico;
 import com.forohub.challenge.domain.curso.CursoRepository;
 import com.forohub.challenge.domain.usuario.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,8 +33,18 @@ public class TopicosService {
 
     }
 
-    public List<DatosListadoTopico> listarTopicos() {
+    public Page<DatosListadoTopico> listarTopicos(Pageable paginacion) {
 
-        return topicoRepository.findAll().stream().map(DatosListadoTopico::new).toList();
+        return topicoRepository.findAll(paginacion).map(DatosListadoTopico::new);
+    }
+
+    public void actualizarTopico(Long id, DatosActualizarTopico datos) {
+        Topico topico = topicoRepository.getReferenceById(id);
+        topico.actualizarDatos(datos);
+    }
+
+    public void eliminarTopico(Long id) {
+        Topico topico = topicoRepository.getReferenceById(id);
+        topicoRepository.delete(topico);
     }
 }

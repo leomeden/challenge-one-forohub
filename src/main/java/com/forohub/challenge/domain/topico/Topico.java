@@ -50,8 +50,20 @@ public class Topico {
         this.curso = curso;
     }
 
+    public void actualizarDatos(DatosActualizarTopico datos) {
+        if(datos.titulo() != null){
+            this.titulo = datos.titulo();
+        }
+
+        if(datos.mensaje() != null){
+            this.mensaje = datos.mensaje();
+        }
+
+        if(datos.status() != null){
+            this.status = datos.status();
+        }
 
 
+    }
 
-    //private List<Respuesta> respuestas;
 }

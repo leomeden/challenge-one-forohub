@@ -1,12 +1,12 @@
 package com.forohub.challenge.controller;
 
 
-import com.forohub.challenge.domain.topico.DatosAgregarTopico;
-import com.forohub.challenge.domain.topico.DatosListadoTopico;
-import com.forohub.challenge.domain.topico.Topico;
-import com.forohub.challenge.domain.topico.TopicosService;
+import com.forohub.challenge.domain.topico.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,13 +25,27 @@ public class TopicoController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity agregar(@RequestBody @Valid DatosAgregarTopico datos){
+    public ResponseEntity<String> agregar(@RequestBody @Valid DatosAgregarTopico datos){
         topicosService.agregarTopico(datos);
         return ResponseEntity.ok("Verificar si se guardo - el request llego correctamente");
     }
 
     @GetMapping
-    public List<DatosListadoTopico> listadoTopicos(){
-        return topicosService.listarTopicos();
+    public ResponseEntity<Page<DatosListadoTopico>> listadoTopicos(@PageableDefault(size = 5, sort = "titulo") Pageable paginacion){
+        return ResponseEntity.ok(topicosService.listarTopicos(paginacion));
+    }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<String> actualizarTopico(@PathVariable Long id, @RequestBody DatosActualizarTopico datos){
+        topicosService.actualizarTopico(id, datos);
+        return ResponseEntity.ok("Se actualizó con éxito");
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<String> eliminarTopico(@PathVariable Long id){
+        topicosService.eliminarTopico(id);
+        return ResponseEntity.ok("Se eliminó con éxito");
     }
 }
