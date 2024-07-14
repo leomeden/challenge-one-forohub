@@ -58,6 +58,9 @@ public class TopicosService {
     }
 
     public DatosListadoTopico actualizarTopico(Long id, DatosActualizarTopico datos) {
+        if(topicoRepository.findById(id).isEmpty()){
+            throw new ValidacionDeIntegridad("El id del curso no fue encontrado");
+        }
         Topico topico = topicoRepository.getReferenceById(id);
         topico.actualizarDatos(datos);
         return new DatosListadoTopico(topico);
@@ -65,6 +68,9 @@ public class TopicosService {
 
     //delete logico
     public void eliminarTopico(Long id) {
+        if(topicoRepository.findById(id).isEmpty()){
+            throw new ValidacionDeIntegridad("El id del curso no fue encontrado");
+        }
         Topico topico = topicoRepository.getReferenceById(id);
         //topicoRepository.delete(topico);
         topico.desactivarTopico();
@@ -72,6 +78,10 @@ public class TopicosService {
     }
 
     public DatosListadoTopico obtenerTopicoPorId(Long id) {
+
+        if(topicoRepository.findById(id).isEmpty()){
+            throw new ValidacionDeIntegridad("El id del curso no fue encontrado");
+        }
         return new DatosListadoTopico(topicoRepository.getReferenceById(id));
     }
 }
