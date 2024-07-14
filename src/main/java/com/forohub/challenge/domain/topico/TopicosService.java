@@ -1,7 +1,9 @@
 package com.forohub.challenge.domain.topico;
 
 import com.forohub.challenge.domain.curso.CursoRepository;
+import com.forohub.challenge.domain.topico.validaciones.ValidadorDeTopicos;
 import com.forohub.challenge.domain.usuario.UsuarioRepository;
+import com.forohub.challenge.infra.errores.ValidacionDeIntegridad;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +26,20 @@ public class TopicosService {
     @Autowired
     private CursoRepository cursoRepository;
 
+    @Autowired
+    private List<ValidadorDeTopicos> validadores;
+
     public DatosListadoTopico agregarTopico(DatosAgregarTopico datos){
+
+        if(usuarioRepository.findById(datos.idAutor()).isEmpty()){
+            throw new ValidacionDeIntegridad("El id del usuario no fue encontrado");
+        }
+
+        if(cursoRepository.findById(datos.idCurso()).isEmpty()){
+            throw new ValidacionDeIntegridad("El id del curso no fue encontrado");
+        }
+
+        validadores.forEach(v->v.validar(datos));
 
         var usuario = usuarioRepository.findById(datos.idAutor()).get();
 
